@@ -6,4 +6,16 @@
  */
 export const pick = (obj, ...fields) => {
 
+	const newObj = {};	
+	
+	for (let field of fields){
+		if (Object.entries(obj).find(element => element[0] === field)){
+				newObj[field] = obj[field];
+			}
+	}
+	
+	return newObj;
+
 };
+
+

@@ -5,5 +5,24 @@
  * @returns {string[]}
  */
 export function sortStrings(arr, param = 'asc') {
+	const arrCopy = arr.slice();
 
+	if (param==='asc'){
+
+		arrCopy.sort(
+			function(a,b){
+				return (a.localeCompare(b, undefined, {caseFirst: 'upper'}));
+			});
+	}
+
+	else if (param==='desc'){
+
+		arrCopy.sort(
+			function(a,b){
+				return -(a.localeCompare(b, undefined, {caseFirst: 'lower'}));
+			});
+	}
+
+	return arrCopy;
 }
+
