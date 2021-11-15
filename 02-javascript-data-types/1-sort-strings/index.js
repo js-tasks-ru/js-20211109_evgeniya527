@@ -11,7 +11,7 @@ export function sortStrings(arr, param = 'asc') {
 
 		arrCopy.sort(
 			function(a,b){
-				return (a.localeCompare(b, undefined, {caseFirst: 'upper'}));
+				return (a.localeCompare(b, ['ru', 'en'], {caseFirst: 'upper'}));
 			});
 	}
 
@@ -19,7 +19,7 @@ export function sortStrings(arr, param = 'asc') {
 
 		arrCopy.sort(
 			function(a,b){
-				return -(a.localeCompare(b, undefined, {caseFirst: 'lower'}));
+				return -(a.localeCompare(b, ['ru', 'en'], {caseFirst: 'lower'}));
 			});
 	}
 
