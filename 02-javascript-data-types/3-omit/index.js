@@ -6,16 +6,20 @@
  */
 export const omit = (obj, ...fields) => {
 
-	const objCopy = Object.assign({}, obj);
+	const newObj = {};
 
-	for (let field of fields){
-		if (Object.entries(obj).find(element => element[0] === field)){
-				delete objCopy[field];
+	for (const key of Object.keys(obj)){
+		if (!fields.includes(key)){
+				newObj[key] = obj[field];
 			}
 	}
 	
-	return objCopy;
+	return newObj;
 };
+
+
+
+
 
 
 
