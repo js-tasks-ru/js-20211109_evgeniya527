@@ -4,26 +4,18 @@
  * @returns {function} - function-getter which allow get value from object by set path
  */
 export function createGetter(path) {
+	//попытка решить через reduce
 	
 	const pathArray = path.split('.');
-	
+		
 	return (function (sourseObj){
-		
-		let result = sourseObj;
-		
-		function getValue(index){
-			if (index === pathArray.length || result === undefined){
-				return result;
-			}
-			
-			result = result[pathArray[index]];
-			
-			return getValue(index+1);
-					
-		}
 				
-		return getValue(0);
-	});
+		if (!Object.keys(sourseObj).length) return; 
+		
+		let obj = sourseObj;		
+		return pathArray.reduce((result, item, index) => obj = obj[item], {});
+		
+	})
 }
 
 
