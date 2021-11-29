@@ -61,7 +61,7 @@ export default class ColumnChart {
 		
 
 		
-	// почему с getSubElements и getColumnBody не делается геттер, как с getTemplates? есть какое-то правило?
+
 	}	
 	
 	getSubElements(element) {
@@ -78,7 +78,8 @@ export default class ColumnChart {
 	}
   
 
-
+	// почему с getColumnBody не делается геттер, как с getTemplates? есть какое-то правило?
+	
 	getColumnBody() {
 		const maxValue = Math.max(...this.data);
 		const scale = this.chartHeight / maxValue;
