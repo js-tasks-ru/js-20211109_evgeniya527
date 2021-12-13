@@ -90,8 +90,7 @@ export default class SortableTable {
 	
 		if (column) {
 			const { id, order } = column.dataset;
-			//
-			
+						
 			const newOrder = toggleOrder(order);
 		
 			this.sorted = {

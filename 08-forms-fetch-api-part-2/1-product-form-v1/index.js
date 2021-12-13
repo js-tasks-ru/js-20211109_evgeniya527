@@ -216,7 +216,7 @@ export default class ProductForm {
 
 		const excludedFields = ['images'];
 		
-		// excludedFields
+		// excludedFields, это потому, что картинки обрабатываем отдельно?
 		
 		const formatToNumber = ['price', 'quantity', 'discount', 'status'];
 		const fields = Object.keys(this.defaultFormData).filter(item => !excludedFields.includes(item));
