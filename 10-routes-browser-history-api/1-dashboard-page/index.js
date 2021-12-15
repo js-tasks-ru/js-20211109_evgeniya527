@@ -12,15 +12,26 @@ export default class Page {
 	element;
 	subElements = {};
 	components = {};
+	url = new URL('api/dashboard/bestsellers', BACKEND_URL);
 	
 	
 	initComponents() {
+		
+		const now = new Date();
+		const to = new Date();
+		
+		const from = new Date(now.setMonth(now.getMonth() - 1));
+		
+		const rangePicker = new RangePicker({
+			from,
+			to
+		});
 
 		const ordersChart = new ColumnChart({
 			url: 'api/dashboard/orders',
 			range: {
-				from: new Date('2020-04-06'),
-				to: new Date('2020-05-06'),
+				from,
+				to
 			},
 			label: 'orders',
 			link: '#'
@@ -29,8 +40,8 @@ export default class Page {
 		const salesChart = new ColumnChart({
 			url: 'api/dashboard/sales',
 			range: {
-				from: new Date('2020-04-06'),
-				to: new Date('2020-05-06'),
+				from,
+				to
 			},
 			label: 'sales'
 		});
@@ -38,24 +49,36 @@ export default class Page {
 		const customersChart = new ColumnChart({
 			url: 'api/dashboard/customers',
 			range: {
-				from: new Date('2020-04-06'),
-				to: new Date('2020-05-06'),
+				from,
+				to
 			},
 			label: 'customers'
 		});
 		
 		const sortableTable = new SortableTable(header, {
-
-			url: `api/dashboard/bestsellers?from=2021-11-13T13%3A47%3A25.012Z&to=2021-12-13T13%3A47%3A25.012Z&_sort=title&_order=asc&_start=0&_end=30`,
+			url: `api/dashboard/bestsellers?from=${from.toISOString()}&to=${to.toISOString()}&_sort=title&_order=asc&_start=0&_end=30`,
 			isSortLocally: true
 		});
 		
+		this.components.rangePicker = rangePicker;
 		this.components.ordersChart = ordersChart;
 		this.components.salesChart = salesChart;
 		this.components.customersChart = customersChart;
 		this.components.sortableTable = sortableTable;
 		
-		// с rangePicker не успеваю пока разобраться
+	}
+	
+	
+	loadData (from, to){
+		
+		this.url.searchParams.set('_start', '0');
+		this.url.searchParams.set('_end', '1');
+		this.url.searchParams.set('_sort', 'title');
+		this.url.searchParams.set('_order', 'asc');
+		this.url.searchParams.set('_from', from.toISOString());
+		this.url.searchParams.set('_to', to.toISOString());
+		
+		return fetchJson(this.url);
 	}
 	
 	render() {
@@ -69,9 +92,12 @@ export default class Page {
 		for (const component of Object.keys(this.components)) {
 			const subElement = this.subElements[component];
 			
-			const full_elem = this.components[component].element;
-			subElement.append(full_elem);
+			const {element} = this.components[component];
+			
+			subElement.append(element);
 		}	
+		
+		this.initEventListeners();
 
 		return this.element;
 	}
@@ -94,6 +120,11 @@ export default class Page {
 			<div class="dashboard full-height flex-column">
 				<div class="content__top-panel">
 					<h2 class="page-title">Панель управления</h2>
+					
+					<div class="rangepicker" data-element="rangePicker">
+
+					</div>
+	
 				</div>
 				<div class="dashboard__charts">
 					<div data-element="ordersChart" class="dashboard__chart_orders"></div>
@@ -110,6 +141,22 @@ export default class Page {
 				</div>
 			</div>
 		`;
+	}
+	
+	initEventListeners(){
+		this.components.rangePicker.element.addEventListener('date-select', event => {
+			const {from, to} = event.detail;
+			this.updateComponents(from, to);
+			});
+	}
+	
+	
+	async updateComponents(from, to){
+		const data = await this.loadData(from, to);
+		this.components.sortableTable.update(data);
+		this.components.ordersChart.update(from, to);
+		this.components.salesChart.update(from, to);
+		this.components.customersChart.update(from, to);
 	}
 
 	
