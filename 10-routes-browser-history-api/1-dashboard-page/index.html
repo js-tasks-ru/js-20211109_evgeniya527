@@ -59,14 +59,12 @@
 
   const contentNode = document.querySelector('#content');
 
-  async function initialize () {
-    const page = new Page();
-    const element = await page.render();
+  const page = new Page();
+  const element = page.render();
 
-    contentNode.innerHTML = '';
-    contentNode.append(element);
-  }
+  contentNode.innerHTML = '';
+  contentNode.append(element);
 
-  initialize();
+
 </script>
 </body>
